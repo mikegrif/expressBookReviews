@@ -33,43 +33,84 @@ public_users.post('/register', (req, res) => {
   return res.status(404).json({ message: 'Unable to register user' });
 });
 
-// Get the book list available in the shop
+// Task 1: Get the book list available in the shop
+// public_users.get('/', function (req, res) {
+//   //Write your code here
+//   res.send(JSON.stringify(books, null, 4));
+// });
+
+// Task 10: Get the book list available in the shop
 public_users.get('/', function (req, res) {
-  //Write your code here
-  res.send(JSON.stringify(books, null, 4));
+  return new Promise((resolve, reject) => {
+    if (Object.keys(books).length > 0) {
+      resolve(res.send(JSON.stringify(books, null, 4)));
+    } else {
+      reject(res.status(404).json({ message: 'Did not find any books' }));
+    }
+  });
 });
 
-// Get book details based on ISBN
+// Task 2: Get book details based on ISBN
+// public_users.get('/isbn/:isbn', function (req, res) {
+//   //Write your code here
+//   let isbn = req.params.isbn;
+//   res.send(books[isbn]);
+// });
+
+// Task 11: Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
-  //Write your code here
   let isbn = req.params.isbn;
-  res.send(books[isbn]);
+
+  return new Promise((resolve, reject) => {
+    let book = books[isbn];
+    if (book) {
+      resolve(res.send(books[isbn]));
+    } else {
+      reject(res.status(404).json({ message: 'Did not find book' }));
+    }
+  });
 });
 
-// Get book details based on author
+// Task 12: Get book details based on author
 public_users.get('/author/:author', function (req, res) {
   //Write your code here
   let author = req.params.author;
-  for (const id in books) {
-    const book = books[id];
-    if (author === book.author) {
-      res.send(book);
+  return new Promise((resolve, reject) => {
+    for (const id in books) {
+      const book = books[id];
+      if (author === book.author) {
+        resolve(res.send(book));
+      }
     }
-  }
-  return res.status(404).json({ message: 'Did not find book for author ' });
+    reject(res.status(404).json({ message: 'Did not find book for author ' }));
+  });
 });
 
-// Get all books based on title
+// Task 4: Get all books based on title
+// public_users.get('/title/:title', function (req, res) {
+//   //Write your code here
+//   let title = req.params.title;
+//   for (const id in books) {
+//     const book = books[id];
+//     if (title === book.title) {
+//       res.send(book);
+//     }
+//   }
+//   return res.status(404).json({ message: 'Did not find book for title ' });
+// });
+
+// Task 11: Get all books based on title
 public_users.get('/title/:title', function (req, res) {
-  //Write your code here
   let title = req.params.title;
-  for (const id in books) {
-    const book = books[id];
-    if (title === book.title) {
-      res.send(book);
+  return new Promise((resolve, reject) => {
+    for (const id in books) {
+      const book = books[id];
+      if (title === book.title) {
+        resolve(res.send(book));
+      }
     }
-  }
-  return res.status(404).json({ message: 'Did not find book for title ' });
+    reject(res.status(404).json({ message: 'Did not find book for title ' }));
+  });
 });
 
 //  Get book review
